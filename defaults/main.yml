@@ -1,0 +1,7 @@
+---
+sshd_port: 22
+sshd_password_auth: "no"
+sshd_permit_empty_passwords: "no"
+sshd_permit_root_login: "yes"
+sshd_pub_key_auth: "yes"
+sshd_extra_parameters: ""

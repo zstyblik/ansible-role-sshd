@@ -1,0 +1,30 @@
+Include /etc/ssh/sshd_config.d/*.conf
+
+Port {{ sshd_port | int }}
+PermitRootLogin {{ sshd_permit_root_login }}
+PasswordAuthentication {{ sshd_password_auth }}
+PermitEmptyPasswords {{ sshd_permit_empty_passwords }}
+PubkeyAuthentication {{ sshd_pub_key_auth }}
+
+Protocol 2
+
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+
+SyslogFacility AUTHPRIV
+AuthorizedKeysFile .ssh/authorized_keys
+KbdInteractiveAuthentication no
+GSSAPIAuthentication no
+GSSAPICleanupCredentials yes
+UsePAM yes
+X11Forwarding yes
+UseDNS no
+AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
+AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
+AcceptEnv LC_IDENTIFICATION LC_ALL LANGUAGE
+AcceptEnv XMODIFIERS
+PrintMotd no
+Subsystem	sftp	/usr/lib/openssh/sftp-server
+{% if sshd_extra_parameters | length > 0 %}
+{{ sshd_extra_parameters }}
+{% endif %}
