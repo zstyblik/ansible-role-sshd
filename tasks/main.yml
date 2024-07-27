@@ -1,0 +1,34 @@
+---
+- name: Install SSH server package.
+  ansible.builtin.package:
+    name: openssh-server
+    state: present
+  become: true
+
+- name: Enable SSH server service.
+  ansible.builtin.systemd:
+    name: ssh.service
+    daemon_reload: true
+    state: started
+    enabled: true
+  become: true
+
+- name: Get current SSH port.
+  ansible.builtin.set_fact:
+    sshd_current_port: "{{ ansible_port | default('22') }}"
+
+- name: Deploy sshd_config.
+  ansible.builtin.template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: 0600
+    validate: sshd -t -f %s
+  become: true
+  notify: restart sshd
+
+- name: Check whether SSH port has changed.
+  ansible.builtin.debug:
+    msg: "SSH daemon port has changed from {{ sshd_current_port }} to {{ sshd_port }}"
+  when: sshd_current_port | int != sshd_port | int
