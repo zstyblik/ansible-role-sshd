@@ -1,7 +1,9 @@
 ---
 dependencies: []
 galaxy_info:
-  author: zstyblik
+  author: Zdenek Styblik
+  role_name: sshd
+  namespace: zstyblik
   description: Ansible role for management of ssh daemon
   company: Zdenek Styblik
   license: MIT
